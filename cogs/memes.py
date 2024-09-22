@@ -374,19 +374,35 @@ class Memes(commands.Cog):
     @commands.command(hidden=True)
     async def warm(self, ctx: KurisuContext, u: discord.Member):
         """Warms a user :3"""
-        celsius = random.randint(38, 100)
+        celsius = random.randint(38, 50)
         fahrenheit = self.c_to_f(celsius)
         kelvin = self.c_to_k(celsius)
         await self._meme(ctx, f"{u.mention} warmed. User is now {celsius}°C ({fahrenheit}°F, {kelvin}K).", True)
+
+    @commands.command(hidden=True, aliases=["roast"])
+    async def burn(self, ctx: KurisuContext, u: discord.Member):
+        """Burns a user :fire:"""
+        celsius = random.randint(51, 500)
+        fahrenheit = self.c_to_f(celsius)
+        kelvin = self.c_to_k(celsius)
+        await self._meme(ctx, f"{u.mention} burned. User is now a crispy {celsius}°C ({fahrenheit}°F, {kelvin}K).", True)
 
     # adding it here because It's pretty much the same code
     @commands.command(hidden=True, aliases=["cool"])
     async def chill(self, ctx: KurisuContext, u: discord.Member):
         """Cools a user :3"""
-        celsius = random.randint(-273, 34)
+        celsius = random.randint(-3, 21)
         fahrenheit = self.c_to_f(celsius)
         kelvin = self.c_to_k(celsius)
         await self._meme(ctx, f"{u.mention} cooled. User is now {celsius}°C ({fahrenheit}°F, {kelvin}K).", True)
+
+    @commands.command(hidden=True, aliases=["cryofreeze"])
+    async def freeze(self, ctx: KurisuContext, u: discord.Member):
+        """Freezes a user :3"""
+        celsius = random.randint(-300, -4)
+        fahrenheit = self.c_to_f(celsius)
+        kelvin = self.c_to_k(celsius)
+        await self._meme(ctx, f"{u.mention} frozen. User is now {celsius}°C ({fahrenheit}°F, {kelvin}K). Wait how is that possible?", True)
 
     # End code from https://github.com/reswitched/robocop-ng
 
@@ -396,7 +412,7 @@ class Memes(commands.Cog):
         await self._meme(ctx, f"{u.mention} is now beaned. <a:bean:462076812076384257>", True)
 
     @commands.command(hidden=True)
-    async def rinse(self, ctx: KurisuContext, u: discord.Member):
+    async def shower(self, ctx: KurisuContext, u: discord.Member):
         """unsoap"""
         await self._meme(ctx, f"{u.mention} has had their soap removed. 🧼 🚿", True)
 
@@ -583,18 +599,18 @@ class Memes(commands.Cog):
 
     @commands.command(hidden=True)
     async def blahaj(self, ctx: KurisuContext, money: float):
-        """Displays how many Blahajes you could buy with a given amount of money. ($ or €)"""
+        """Displays how many Blåhajs you could buy with a given amount of money. ($ or €)"""
         # blahaj. takes usd or eur
         blahaj_link = "https://nintendohomebrew.com/assets/img/blahaj.png"
         blahaj_price = 30  # should we handle eur and usd price difference properly?
         if money < blahaj_price:
-            text = "You can't even buy a Blahaj! Get more money, then buy a Blahaj."
+            text = "You can't even buy a Blåhaj! Get more money, then buy a Blåhaj."
         elif money // blahaj_price == 1:
-            text = "You could buy one Blahaj with that. Think about it."
+            text = "You could buy one Blåhaj with that. Think about it."
         elif money > blahaj_price * 100:
             text = "You could buy the entire stock. Think about it."
         else:
-            text = f"You could buy {int(money // blahaj_price)} Blahajes with that. Think about it."
+            text = f"You could buy {int(money // blahaj_price)} Blåhajs with that. Think about it."
         await self._meme(ctx, text, True, blahaj_link)
 
     @is_staff("Helper")
@@ -649,7 +665,8 @@ class Memes(commands.Cog):
                      "has junko had a name change today?", "got milk?", "got pilk?",
                      "it has been 0 days since eip broke me", "ETA WEN PLS",
                      "The beatings will continue until morale improves.",
-                     "Zǎoshang hǎo zhōngguó xiànzài wǒ yǒu BING CHILLING", "HELP QUIJA?", "glazy if you were cum"]
+                     "Zǎoshang hǎo zhōngguó xiànzài wǒ yǒu BING CHILLING", "HELP QUIJA?", "glazy if you were cum",
+                     str(self.joyclap), "Hell is empty, and the demons are here.", "Man alone measures time. Man alone chimes the hour.\r\nAnd, because of this, man alone suffers a paralyzing fear that no other creature endures.\r\nA fear of time running out."]
         await ctx.send(random.choice(motd_list))
 
     @commands.command(hidden=True)
@@ -659,6 +676,12 @@ class Memes(commands.Cog):
                      "...we will send unto them... only you.", "May your thirst for retribution never quench, may the blood on your sword never dry, and may we never need you again.",
                      "That is a weapon, NOT a teleporter.", "You can't just shoot a hole into the surface of **Mars**...", "They are rage, brutal, without mercy. But you. You will be worse. Rip and tear, until it is done."]
         await ctx.send(random.choice(doom_list))
+
+    @commands.command(hidden=True)
+    async def hru(self, ctx: KurisuContext):
+        """Finally asking how Kurisu is."""
+        feeling_list = ["AWFUL", "stfu", "alright", "I am a bot what the fuck do you think?", "Look at the assistance channels for two minutes and tell me how **you** think I am."]
+        await ctx.send(random.choice(feeling_list))
 
     @commands.command(hidden=True)
     async def wagu(self, ctx: KurisuContext, sample: commands.Range[int, 1, 10] = 1):
@@ -733,6 +756,12 @@ class Memes(commands.Cog):
         await self._meme(ctx, "",
                          image_link="https://upload.wikimedia.org/wikipedia/commons/d/dd/Le_poggere.jpg?20201109224437")
 
+    @commands.command(hidden=True)
+    async def dumbass(self, ctx: KurisuContext):
+        """use sparingly"""
+        await self._meme(ctx, "",
+                         image_link="https://nintendohomebrew.com/assets/img/nhmemes/dumbass.png")
+
     @commands.command(hidden=True, aliases=["🅱"])
     async def b(self, ctx: KurisuContext):
         """haha, b emoji funny"""
@@ -752,6 +781,14 @@ class Memes(commands.Cog):
                   "https://nintendohomebrew.com/assets/img/nhmemes/b14.png",
                   "https://nintendohomebrew.com/assets/img/nhmemes/b15.png"]
         await self._meme(ctx, "", image_link=random.choice(b_list))
+
+    @commands.command(hidden=True, aliases=['america'])
+    @commands.cooldown(rate=1, per=300.0, type=commands.BucketType.channel)
+    async def shootings(self, ctx: KurisuContext):
+        """so we don't have to find it every time"""
+        shooting_list = ["https://nintendohomebrew.com/assets/img/nhmemes/shooting1.png",
+                         "https://nintendohomebrew.com/assets/img/nhmemes/shooting2.jpg"]
+        await self._meme(ctx, "", image_link=random.choice(shooting_list))
 
 
 async def setup(bot):

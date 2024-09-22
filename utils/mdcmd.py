@@ -14,9 +14,10 @@ if TYPE_CHECKING:
     from cogs.assistancewiiu import AssistanceWiiU
     from cogs.assistance3ds import Assistance3DS
     from cogs.assistanceswitch import AssistanceSwitch
-    AssistanceCogs = Assistance | AssistanceWii | AssistanceWiiU | Assistance3DS | AssistanceSwitch
+    from cogs.assistancehardware import AssistanceHardware
+    AssistanceCogs = Assistance | AssistanceWii | AssistanceWiiU | Assistance3DS | AssistanceSwitch | AssistanceHardware
 
-systems_no_aliases = ('3ds', 'wiiu', 'vwii', 'switch', 'wii', 'dsi')
+systems_no_aliases = ('3ds', 'wiiu', 'vwii', 'switch', 'wii', 'dsi', 'gba')
 aliases = {
     'nx': 'switch',
     'ns': 'switch'
@@ -144,6 +145,8 @@ def md_file_to_embed(md_path: str) -> tuple[str, str, dict, discord.Embed]:
         'switch': ConsoleColor.switch(),
         'legacy': ConsoleColor.legacy(),
         'dsi': ConsoleColor.legacy(),
+        'gba': None,
+        'hardware': None,
         'all': None  # default embed color
     }
 
@@ -245,7 +248,7 @@ def add_md_files_as_commands(cog_class: 'Type[AssistanceCogs]', md_dir: str = No
         cooldowns[command] = (int(header['cooldown-rate']), int(header['cooldown-per']))
 
     # the tutorial subdirectory doesn't need console filtering
-    filter_cmds = "tutorial" not in md_dir
+    filter_cmds = "tutorial" not in md_dir and "hardware" not in md_dir
 
     for command, embed_dict in new_commands.items():
         if filter_cmds:

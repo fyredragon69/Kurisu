@@ -80,8 +80,9 @@ Please contact <@!333857992170536961> if you need to get in touch with the staff
 Please contact <@!333857992170536961> if you need to get in touch with the staff team. Mod-Mail is NOT FOR GETTING HELP WITH HACKING.**\n"""
 
         self.nickname_policy = """🏷️ __*Username/Nickname and Avatar policy*__
-Usernames are to be kept primarily alphanumeric, to keep them easy to tag and read. Excessively long usernames are not acceptable. Usernames and avatars that are annoying, offensive, inappropriate ("nsfw"), and/or disruptive to others are also not allowed.
-Usernames that go against these rules will be assigned a nickname. Users can request a specific nickname that follows these rules.
+Usernames must begin with at least one alphanumeric character and are to be primarily alphanumeric, to keep them easy to tag and read.
+Excessively long usernames are not acceptable. Usernames and avatars that are annoying, offensive, inappropriate ("nsfw"), and/or disruptive to others are also not allowed.
+Usernames that go against these rules will be assigned a nickname. Users are able to change their own nickname, but may be blocked from messaging by AutoMod if the selected nickname or profile name is not acceptable.
 If the username disrupts the general chat flow, pings included, the user will be asked to change it. Refusal will result in a kick from the server.
 Users with avatars against these rules will be asked to change them or be kicked from the server.
 Blank names and avatars are considered disruptive and are not allowed."""
@@ -96,7 +97,7 @@ A few commands may be useful for you to get information faster. Random command u
 • `.help Assistance` - List assistance-related commands. These can have useful information.
 • `.help` - List all the other available commands."""
 
-        self.extra = f"""While we appreciate everyone who boosts the server **IT DOES NOT MAKE YOU EXEMPT FROM THE RULES.** We've given booster reaction perms in {self.bot.channels['off-topic'].mention}, {self.bot.channels['elsewhere'].mention}, and {self.bot.channels['nintendo-discussion'].mention}, you can also stream in the Streaming gamer voice channel, and change your nick once every 6hrs using a bot command in your DM with {self.bot.guild.me.mention},  as a thank you for boosting the server.
+        self.extra = f"""While we appreciate everyone who boosts the server **IT DOES NOT MAKE YOU EXEMPT FROM THE RULES.** We've given boosters reaction perms in {self.bot.channels['off-topic'].mention}, {self.bot.channels['elsewhere'].mention}, and {self.bot.channels['nintendo-discussion'].mention}, and you can also stream in the Streaming gamer voice channel.
 📨 Invitation link This is a permanent invitation link to the server!
 https://discord.gg/C29hYvh"""
 
@@ -118,7 +119,7 @@ https://discord.gg/C29hYvh"""
         helpers_wiiu = [f"<@{helper}>" for helper, console in helpers.items() if console == 'WiiU']
         helpers_legacy = [f"<@{helper}>" for helper, console in helpers.items() if console == 'Legacy']
         helpers_switch = [f"<@{helper}>" for helper, console in helpers.items() if console == 'Switch']
-        helpers_wii = [m.mention for m in ctx.guild.members if self.bot.roles['Wii-Assistance'] in m.roles]
+        helpers_wii = [f"<@{helper}>" for helper, console in helpers.items() if console == 'Wii']
         await channel.send(self.helper_list)
         await channel.send(f"{str(self.logo_3ds)}  Nintendo 3DS\n" + '\n'.join(helpers_3ds))
         await channel.send(f"{str(self.logo_wiiu)}  Wii U\n" + '\n'.join(helpers_wiiu))

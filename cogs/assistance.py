@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import discord
 import logging
+import time
 
 from discord.ext import commands
 from os.path import dirname, join
@@ -10,7 +11,7 @@ from typing import Optional, Literal, TYPE_CHECKING
 from utils.checks import check_if_user_can_sr, is_staff, soap_check
 from utils.mdcmd import add_md_files_as_commands
 from utils.views import BasePaginator, PaginatedEmbedView
-from utils.utils import KurisuCooldown
+from utils.utils import KurisuCooldown, gen_color
 
 if TYPE_CHECKING:
     from kurisu import Kurisu
@@ -33,7 +34,8 @@ class UniDBResultsPaginator(BasePaginator):
             return embed
 
     def create_embed(self, app: dict):
-        embed = discord.Embed(color=int(app['color'][1:], 16))
+        color = int(app['color'][1:], 16) if app.get('color') else gen_color(time.time())
+        embed = discord.Embed(color=color)
         embed.title = app['title']
         embed.description = f"{app.get('description', 'No description provided.')}\n"
         if 'download_page' in app:
@@ -113,7 +115,7 @@ class Assistance(commands.GroupCog):
     @is_staff('Helper')
     @commands.guild_only()
     @commands.command()
-    async def createsmallhelp(self, ctx: GuildContext, console: Literal['3ds', 'switch', 'wiiu', 'legacy'], helpee: discord.Member, *, desc: str):
+    async def createsmallhelp(self, ctx: GuildContext, console: Literal['3ds', 'switch', 'wiiu', 'wii', 'legacy'], helpee: discord.Member, *, desc: str):
         """Creates a small help channel for a user. Helper+ only."""
         if not self.small_help_category:
             return await ctx.send("The small help category is not set.")
@@ -137,6 +139,9 @@ class Assistance(commands.GroupCog):
             return await ctx.send("The soaps category is not set.")
         # Channel names can't be longer than 100 characters
         channel_name = f"3ds-{helpee.name}-soap-🧼"[:100]
+        for channel in self.soaps_category.text_channels:
+            if channel.name == channel_name:
+                return await ctx.send("Soap channel already exists for user.")
         channel = await self.soaps_category.create_text_channel(name=channel_name)
         await asyncio.sleep(3)  # Fix for discord race condition(?)
         await channel.set_permissions(helpee, read_messages=True)
@@ -146,7 +151,7 @@ class Assistance(commands.GroupCog):
                            "2. Boot into GodMode9 by holding start while powering on.\n"
                            "3. Navigate to `SysNAND Virtual`\n"
                            "4. Select `essential.exefs`\n"
-                           "5. Select `copy to 0:/gm9/out`\n"
+                           "5. Select `copy to 0:/gm9/out` (and select `Overwrite file(s)` if prompted - if not prompted, ignore and move on)\n"
                            "6. Power off your console and insert your SD card into your computer.\n"
                            "7. Navigate to `/gm9/out` on your SD, `essential.exefs` should be there.\n"
                            "8. Send the `essential.exefs` in *this specific channel*.\n"
@@ -167,6 +172,21 @@ class Assistance(commands.GroupCog):
         msg = f"🆕 **🧼 channel created**: {ctx.author.mention} created 🧼 channel {channel.mention} | {channel.name} ({channel.id})"
         await self.bot.channels['mod-logs'].send(msg)
         await ctx.send(f"Created 🧼 {channel.mention}.")
+
+    @is_staff('Helper')
+    @commands.guild_only()
+    @commands.command(aliases=["rinse"])
+    async def deletesoap(self, ctx: GuildContext, channels: commands.Greedy[discord.TextChannel]):
+        """Deletes a :soap: help channel. helper+ only."""
+        if not self.soaps_category:
+            return await ctx.send("The soaps category is not set.")
+        for channel in channels:
+            if channel not in self.soaps_category.channels:
+                continue
+            msg = f":x: **:soap: channel deleted**: {ctx.author.mention} deleted :soap: channel {channel.name} ({channel.id})"
+            await self.bot.channels['mod-logs'].send(msg)
+            await ctx.send(f"Deleted :soap: {channel.name}.")
+            await channel.delete()
 
     @is_staff('OP')
     @commands.guild_only()
@@ -270,13 +290,13 @@ class Assistance(commands.GroupCog):
                 await ctx.message.delete()
             except discord.Forbidden:
                 pass
-        api_call = f"https://mkey.eiphax.tech/api?platform={device_code}&inquiry={inquiry}&month={month}&day={day}"
+        api_call = f"https://mkey.nintendohomebrew.com/api?platform={device_code}&inquiry={inquiry}&month={month}&day={day}"
         if device_id:
             api_call += f"&aux={device_id}"
         async with self.bot.session.get(api_call) as r:
             if r.status == 200:
                 ret = await r.json()
-                return await ctx.send(f'{ctx.author.mention if not ctx.interaction else ""} Your key is {ret["key"]}.', ephemeral=True)
+                return await ctx.send(f'{ctx.author.mention if not ctx.interaction else ""} Your key is {ret["key"]:05}.', ephemeral=True)
             else:
                 return await ctx.send(f'{ctx.author.mention if not ctx.interaction else ""} API returned error {r.status}. Please check your values and try again.', ephemeral=True)
 

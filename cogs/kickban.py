@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import discord
 import datetime
+import random
 
 from discord import app_commands
 from discord.ext import commands
@@ -70,6 +71,17 @@ class KickBan(commands.GroupCog):
     @commands.command(name="ban", aliases=["yeet"])
     async def ban_member(self, ctx: GuildContext, member: discord.Member | discord.User, days: Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7]] = 0, *, reason: Optional[str] = None):
         """Bans a user from the server. OP+ only. Optional: [days] Specify up to 7 days of messages to delete."""
+        success_list = [f"{member} is now b&. 👍",
+                        f"{member} has been thrown into the sun. 👍",
+                        f"{member} is now heren't. 👍",
+                        f"{member} has been shown the door. 👍",
+                        f"{member} fucked around and found out. 👍",
+                        f"{member} has been yeeted. 👍",
+                        f"{member} has been sent to Detroit. 👍",
+                        f"{member} has been sent to the UK. 👍",
+                        f"{member} has encountered an error, and needs to close. 👍",
+                        f"{member} is not responding, and has been terminated. 👍",
+                        f"{member} ran into a problem and needs to restart. Please refer to my dick and balls for more information. 👍"]
         if await check_bot_or_staff(ctx, member, "ban"):
             return
 
@@ -89,7 +101,7 @@ class KickBan(commands.GroupCog):
         # Remove any timeban
         await self.restrictions.remove_restriction(member, Restriction.Ban)
 
-        await ctx.send(f"{member} is now b&. 👍")
+        await ctx.send(random.choice(success_list))
         await self.bot.logs.post_action_log(ctx.author, member, 'ban', reason=reason)
 
     @is_staff_app("OP")
