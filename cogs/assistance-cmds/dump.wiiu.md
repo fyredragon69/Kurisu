@@ -1,6 +1,6 @@
 ---
 title: Wii U dump/install Guide
-url: https://wiiu.hacks.guide/#/dump-games
+url: https://wiiu.hacks.guide/dump-games.html
 author.name: NH Discord Server
 author.url: https://wiiu.hacks.guide/dump-games.html
 thumbnail-url: https://nintendohomebrew.com/assets/img/nhmemes/bigh.png
